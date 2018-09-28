@@ -1,5 +1,5 @@
 const { google } = require('googleapis');
-const { getMany, postOne, parseResponses } = require('./util');
+const { getValues, postOne, parseResponses } = require('./util');
 const { ApolloServer, gql } = require('apollo-server');
 
 
@@ -53,14 +53,14 @@ const typeDefs = gql`
 const resolvers = {
   Query: {
     responses: async (_, args, ctx, info) => {
-      const response = await getMany(ctx);
-      return parseResponses(response); 
+      const response = await getValues(ctx);
+      return response; 
     },
   },
 
   Mutation: {
     createResponse: async (_, { response }, ctx, info) => {
-      const res = await postOne(ctx, response);
+      const res = await addRow(ctx, response);
       return res;
     }
   }

@@ -2,18 +2,22 @@ require('dotenv').config();
 const { google } = require('googleapis');
 const range = 'MEMBER_DIRECTORY!A1:Z1000';
 
-async function getMany({auth}){  
-  const sheets = google.sheets({version: 'v4', auth});
-  const request = {
-    spreadsheetId: process.env.SPREADSHEET_ID,
-    range
+async function getValues({auth}){  
+  const sheets = google.sheets('v4');
+  try {
+    const response = await sheets.spreadsheets.values.get({
+      spreadsheetId: process.env.SPREADSHEET_ID,
+      range,
+      auth  
+    });
+    const { data } = response;
+    return singleArrayToJSON(data.values);
+  } catch(err){
+    return err;
   }
-  const response = await sheets.spreadsheets.values.get(request);
-  const { data } = response;
-  return data.values;
 }
 
-async function postOne({auth}, values){ 
+async function addRow({auth}, values){ 
   const fields = Object.keys(values)
   const arrayValues = Object.keys(values).map(key=>values[key]);
   const sheets = google.sheets('v4');
@@ -33,7 +37,7 @@ async function postOne({auth}, values){
   }
 }
 
-function parseResponses(array){
+function singleArrayToJSON(array){
   const responses = [];
   const fields = array[0];
   for(let i=1; i<array.length; i++){
@@ -47,5 +51,5 @@ function parseResponses(array){
 }
 
 module.exports = {
-  getMany, parseResponses, postOne
+  getValues, addRow
 }
