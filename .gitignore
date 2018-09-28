@@ -1,0 +1,5 @@
+.env
+client_secret.json
+.DS_Store
+.vscode
+/node_modules
