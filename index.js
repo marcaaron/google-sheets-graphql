@@ -1,5 +1,5 @@
 const { google } = require('googleapis');
-const { getValues, postOne, parseResponses } = require('./util');
+const { getValues, addRow } = require('./util');
 const { ApolloServer, gql } = require('apollo-server');
 
 
@@ -10,6 +10,19 @@ const typeDefs = gql`
     MED
     HIGH
   }
+  
+  enum CommunicationPreference {
+    VIDEO_CHAT
+    CHAT
+    EMAIL
+  }
+
+  enum LearningStyle {
+    TUTORIALS
+    DOCUMENTATION
+    PAIR PROGRAMMING
+    BOOKS
+  }
 
   type Response {
     name: String
@@ -17,12 +30,12 @@ const typeDefs = gql`
     discord_username: String
     availability: Availability
     time_zone: String
-    interests: String
-    programming_languages: String
-    current_skillset: String
+    interests: [String]
+    programming_languages: [String]
+    current_skillset: [String]
     desired_skillset: String
-    learning_style: String
-    communication_preference: String
+    learning_style: [LearningStyle]
+    communication_preference: [CommunicationPreference]
   }
 
   input ResponseInput {

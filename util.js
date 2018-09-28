@@ -1,6 +1,6 @@
 require('dotenv').config();
 const { google } = require('googleapis');
-const range = 'MEMBER_DIRECTORY!A1:Z1000';
+const range = 'Response!A1:Z1000';
 
 async function getValues({auth}){  
   const sheets = google.sheets('v4');
@@ -43,7 +43,14 @@ function singleArrayToJSON(array){
   for(let i=1; i<array.length; i++){
     const response = {};
     fields.forEach((field, index)=>{
-      response[field] = array[i][index];
+      if(/;/g.test(array[i][index])){
+        const toArray = array[i][index].split(';')
+        .filter(item=>item !=="")
+        .map(item=>item.trim());
+        response[field] = toArray;
+      } else {
+        response[field] = array[i][index];
+      }
     });
     responses.push(response);
   }
