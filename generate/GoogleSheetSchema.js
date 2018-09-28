@@ -1,10 +1,10 @@
 const { sheets, authenticate, buildRequests, buildUpdateRequests, getCurrentSheets } = require('./utils');
 
 class GoogleSheetSchema {
-  constructor({keyValues, spreadsheetId, auth}){
+  constructor({schemaValues, spreadsheetId, authClient}){
     this.spreadsheetId = spreadsheetId;
-    this.schema = new Map(keyValues);
-    this.auth = auth
+    this.schema = new Map(schemaValues);
+    this.auth = authClient
   }
 
   async generateSheets(){

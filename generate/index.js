@@ -7,12 +7,25 @@ const keyValues = [
 ];
 
 (async function init(){
-  const auth = await authenticate();
-  const schema = new GoogleSheetSchema({
-    spreadsheetId: process.env.SPREADSHEET_ID,
-    keyValues,
-    auth
-  });
-  await schema.generateSheets();
-  console.log('done');
+  // Wait for Auth Client to Resolve
+  try{
+    const auth = await authenticate();
+    
+    /** Init Schema
+     * @param  {process.env.SPREADSHEET_ID} spreadsheetId - ID of Spreadsheet
+     * @param  {keyValues} schemaValues - 2D Array of Key Values for Map
+     * @param  {auth} authClient - Google Auth Client
+     */
+    
+    const schema = new GoogleSheetSchema({
+      spreadsheetId: process.env.SPREADSHEET_ID,
+      schemaValues: keyValues,
+      authClient: auth
+    });
+    
+    await schema.generateSheets();
+    console.log('done');
+  } catch(err){
+    console.log(err);
+  }
 })();
