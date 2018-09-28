@@ -52,14 +52,14 @@ const typeDefs = gql`
 
 const resolvers = {
   Query: {
-    responses: async (_, args, ctx, info) => {
+    responses: async (_, args, ctx) => {
       const response = await getValues(ctx);
       return response; 
     },
   },
 
   Mutation: {
-    createResponse: async (_, { response }, ctx, info) => {
+    createResponse: async (_, { response }, ctx) => {
       const res = await addRow(ctx, response);
       return res;
     }

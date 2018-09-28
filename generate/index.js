@@ -2,8 +2,21 @@ const GoogleSheetSchema = require('./GoogleSheetSchema.js');
 const { authenticate } = require('./utils.js');
 
 const keyValues = [
-  ['User', ['id', 'name', 'interests']],
-  ['Book', ['id', 'title', 'new']]
+  [
+    'Response', [
+      'name', 
+      'github_username', 
+      'discord_username',
+      'availability',
+      'time_zone',
+      'interests',
+      'programming_languages',
+      'current_skillset',
+      'desired_skillset',
+      'learning_style',
+      'communication_preference'
+    ]
+  ],
 ];
 
 (async function init(){
