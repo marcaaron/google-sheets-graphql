@@ -2,7 +2,6 @@ const { google } = require('googleapis');
 const { getValues, addRow } = require('./util');
 const { ApolloServer, gql } = require('apollo-server');
 
-
 const typeDefs = gql`
 
   enum Availability {
@@ -24,6 +23,22 @@ const typeDefs = gql`
     BOOKS
   }
 
+  enum SkillLevel {
+    BEGINNER
+    INTERMEDIATE
+    ADVANCED
+  }
+
+  type ProgrammingLanguage {
+    language: String!
+    skill_level: SkillLevel
+  }
+
+  input ProgrammingLanguageInput {
+    language: String!
+    skill_level: SkillLevel
+  }
+
   type Response {
     name: String
     github_username: String
@@ -31,7 +46,7 @@ const typeDefs = gql`
     availability: Availability
     time_zone: String
     interests: [String]
-    programming_languages: [String]
+    programming_languages: [ProgrammingLanguage]
     current_skillset: [String]
     desired_skillset: String
     learning_style: [LearningStyle]
@@ -44,12 +59,12 @@ const typeDefs = gql`
     discord_username: String
     availability: Availability
     time_zone: String
-    interests: String
-    programming_languages: String
-    current_skillset: String
+    interests: [String]
+    programming_languages: [ProgrammingLanguageInput]
+    current_skillset: [String]
     desired_skillset: String
-    learning_style: String
-    communication_preference: String
+    learning_style: [LearningStyle]
+    communication_preference: [CommunicationPreference]
   }
 
   type Query {
@@ -59,6 +74,7 @@ const typeDefs = gql`
   type Mutation {
     createResponse(response: ResponseInput!): Boolean
     updateResponse(response: ResponseInput!, where: Int!): Boolean
+    # TODO: updateResponse mutation
   }
 
 `;

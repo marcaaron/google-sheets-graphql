@@ -19,7 +19,7 @@ async function getValues({auth}){
 
 async function addRow({auth}, values){ 
   const fields = Object.keys(values)
-  const arrayValues = Object.keys(values).map(key=>values[key]);
+  const arrayValues = Object.keys(values).map(key=>JSON.stringify(values[key]));
   const sheets = google.sheets('v4');
   try{
     const response = await sheets.spreadsheets.values.append({
@@ -43,13 +43,11 @@ function singleArrayToJSON(array){
   for(let i=1; i<array.length; i++){
     const response = {};
     fields.forEach((field, index)=>{
-      if(/;/g.test(array[i][index])){
-        const toArray = array[i][index].split(';')
-        .filter(item=>item !=="")
-        .map(item=>item.trim());
-        response[field] = toArray;
-      } else {
-        response[field] = array[i][index];
+      const value = array[i][index];
+      if(value){
+        response[field] = JSON.parse(value);
+      }else{
+        response[field] = null;
       }
     });
     responses.push(response);
